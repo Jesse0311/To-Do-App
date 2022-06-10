@@ -1,0 +1,57 @@
+#body {
+    background-color: #71B5C7;
+    font-family: serif;
+    
+}
+
+/* Main Page Jumbrotron Section*/
+.inputDiv {
+    display: inline;
+}
+#addTaskButton:hover {
+    color: #71B5C7;
+    background-color: white;
+}
+#addTaskButton {
+    padding: 6.5px;
+    margin-left: 2px;
+    text-decoration: none;
+    background-color: #71B5C7;
+    color: black;
+    transition-duration: 0.4s;
+    border: 2px solid #71B5C7;
+    border-radius: 12px;
+}
+#addTaskInput {
+    font-size: 20px;
+    padding-left: 10px;
+    margin-right: 2px;
+    border: none;
+    border-bottom: 1px solid black;
+    outline: none;
+    height: 40px;
+    width: auto;
+}
+::placeholder {
+    font-weight: bold;
+    font-size: 20px;
+}
+.jumbotron {
+    background-color: white;
+    margin-top: 40px;
+    margin-left: 80px;
+    margin-right: 80px;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+/* Task List Section */
+#taskSection {
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 30px;
+    margin-left: 80px;
+    margin-right: 80px;
+    background-color: white;
+
+}
