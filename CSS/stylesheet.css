@@ -1,57 +1,247 @@
-#body {
-    background-color: #71B5C7;
+body {
+    height: 100%;
+    margin: 0;
     font-family: serif;
-    
+    display: grid;
+    grid-template-areas:
+        "header header header header"
+        "lists lists todo-wrapper todo-wrapper";
+    grid-gap: 20px;
 }
 
-/* Main Page Jumbrotron Section*/
-.inputDiv {
-    display: inline;
+/* Background image */
+.bg {
+    background-blend-mode: darken;
+    background: url(../IMAGES/background.jpg) no-repeat center fixed;
+    background-size: cover;
 }
-#addTaskButton:hover {
-    color: #71B5C7;
+
+/* Main page header section*/
+.header {
+    text-align: center;
+    grid-area: header;
     background-color: white;
+    width: auto;
+    margin: 20px 20px;
+    padding: 10px;
+    border-radius: 15px;
 }
-#addTaskButton {
+
+/* Styling the task button */
+#addTaskListButton:hover {
+    color: white;
+    background-color: #2A6AC1;
+}
+#addTaskListButton:active {
+    opacity: 0.7;
+}
+#addTaskListButton {
+    width: 40px;
+    border: none;
+    border-radius: 10px;
     padding: 6.5px;
     margin-left: 2px;
     text-decoration: none;
-    background-color: #71B5C7;
-    color: black;
+    font-weight: 900;
+    font-size: 1.5rem;
+    background-color: white;
+    color: #2A6AC1;
     transition-duration: 0.4s;
-    border: 2px solid #71B5C7;
-    border-radius: 12px;
 }
-#addTaskInput {
+
+/* Styling the task input */
+.add-task-input {
+    background: transparent;
     font-size: 20px;
     padding-left: 10px;
     margin-right: 2px;
     border: none;
-    border-bottom: 1px solid black;
+    color: inherit;
+    border-bottom: 1px solid currentColor;
     outline: none;
     height: 40px;
-    width: auto;
+    width: 80%;
+
+    transition: border-bottom 100ms ease-in;
 }
+.add-task-input:focus {
+    border-bottom-width: 2.5px;
+}
+.add-task-input:focus::placeholder {
+    opacity: 0.2;
+}
+
 ::placeholder {
     font-weight: bold;
     font-size: 20px;
 }
-.jumbotron {
-    background-color: white;
-    margin-top: 40px;
-    margin-left: 80px;
-    margin-right: 80px;
+
+/* Task List Section */
+.lists {
+    grid-area: lists;
+}
+.list-name {
+    cursor: pointer;
+}
+.list-name:hover {
+    opacity: 0.7;
+}
+#taskListSection {
+    width: auto;
     padding: 20px;
     border-radius: 15px;
 }
+.task-lists li{
+    position: relative;
+    background-color: #2A6AC1;
+    color: white;
+    border-radius: 5px;
+    margin: 10px;
+    padding-left: 10px;
+    width: 200px;
+    cursor: pointer;
+}
+.task-lists li:active {
+    font-weight: 550;
+}
+.task-lists label {
+    cursor: pointer;
+}
 
-/* Task List Section */
-#taskSection {
-    padding: 20px;
-    border-radius: 15px;
-    margin-top: 30px;
-    margin-left: 80px;
-    margin-right: 80px;
+/* strikethrough checkbox */
+input[type=checkbox]:checked + label {
+    text-decoration: line-through;
+    opacity: 0.7;
+}
+/* Styling the date selector */
+input[type=date]{
+    margin-top: 3px;
+    background-color: #B90C31;
+    padding: 5px;
+    font-family: "Roboto Mono", monospace;
+    color: white;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+::-webkit-calendar-picker-indicator {
     background-color: white;
+    padding: 3px;
+    cursor: pointer;
+    border-radius: 3px;
+}
+/* Styling the time selector */
+input[type=time]{
+    margin-top: 3px;
+    background-color: #B90C31;
+    padding: 5px;
+    margin-left: 12px;
+    font-family: "Roboto Mono", monospace;
+    color: white;
+    font-size: 12px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+}
+::-webkit-time-picker-indicator {
+    background-color: white;
+    padding: 3px;
+    cursor: pointer;
+    border-radius: 3px;
+}
 
+/* Tasks within the task list */
+.todo-wrapper {
+    grid-area: todo-wrapper;
+    background-color: white;
+    border-radius: 15px;
+    padding: 10px;
+    margin-left: 40px;
+    margin-right: 40px;
+    height: 100%;
+    /* display: none; */
+}
+.todo-header {
+    padding: 20px 20px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.todo-title {
+    margin: 0 10px 0 0;
+}
+.tasks-remaining {
+    opacity: 0.7;
+    margin: 0;
+}
+
+/* Styling the tasks */
+.tasks {
+    padding: 0px 15px;
+}
+
+.task {
+    align-items: center;
+}
+.task label{
+    position: relative;
+    top: -2px;
+    margin-left: 5px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+
+/* Styling Edit and Delete buttons */
+.edit-tasks {
+    margin-top: 10px;
+    padding: 0px 15px;
+}
+
+/* Styling the todo input form */
+.new-task-input {
+    padding: 15px 15px;
+}
+
+.todo-input {
+    background: transparent;
+    font-size: 20px;
+    padding-left: 10px;
+    margin-right: 2px;
+    border: none;
+    color: inherit;
+    border-bottom: 1px solid currentColor;
+    outline: none;
+    height: 40px;
+    width: 70%;
+
+    transition: border-bottom 100ms ease-in;
+}
+.todo-input:focus {
+    border-bottom-width: 2.5px;
+}
+.todo-input:focus::placeholder {
+    opacity: 0.2;
+}
+
+/* Styling the todo button */
+#add-todo-button:hover {
+    color: white;
+    background-color: #2A6AC1;
+}
+#add-todo-button:active {
+    opacity: 0.7;
+}
+#add-todo-button {
+    width: 40px;
+    border: none;
+    border-radius: 10px;
+    padding: 6.5px;
+    margin-left: 2px;
+    text-decoration: none;
+    font-weight: 900;
+    font-size: 1.5rem;
+    background-color: white;
+    color: #2A6AC1;
+    transition-duration: 0.4s;
 }
