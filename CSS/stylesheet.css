@@ -7,6 +7,7 @@ body {
         "header header header header"
         "lists lists todo-wrapper todo-wrapper";
     grid-gap: 20px;
+    position: relative;
 }
 
 /* Background image */
@@ -62,10 +63,10 @@ body {
     height: 40px;
     width: 80%;
 
-    transition: border-bottom 100ms ease-in;
+    transition: border-bottom 150ms ease-in;
 }
 .add-task-input:focus {
-    border-bottom-width: 2.5px;
+    border-bottom-width: 2px;
 }
 .add-task-input:focus::placeholder {
     opacity: 0.2;
@@ -81,31 +82,59 @@ body {
     grid-area: lists;
 }
 .list-name {
+    width: fit-content;
+    border: none;
     cursor: pointer;
 }
 .list-name:hover {
-    opacity: 0.7;
+    opacity: 0.5;
 }
 #taskListSection {
     width: auto;
     padding: 20px;
     border-radius: 15px;
 }
-.task-lists li{
-    position: relative;
+.task-list-container {
+    align-items: center;
+    display: flex;
     background-color: #2A6AC1;
-    color: white;
     border-radius: 5px;
-    margin: 10px;
-    padding-left: 10px;
-    width: 200px;
+    cursor: pointer;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+.task-list-content input {
+    outline: none;
+    background-color: transparent;
+    color: white;
+    width: 100%;
+    margin-top: 10px;
+    list-style: none;
+    transition-duration: 0.1s;
+}
+.task-list-content input:active {
+    outline: none;
+    opacity: 1;
+}
+.task-list-content label {
     cursor: pointer;
 }
-.task-lists li:active {
-    font-weight: 550;
+.remove-task-list {
+    display: flex;
+    margin-right: 5px;
 }
-.task-lists label {
-    cursor: pointer;
+.bi:active {
+    opacity: 0.7;
+}
+.bi:hover {
+    color: #B90C31;
+}
+.bi  {
+    color: white;
+    border: none;
+    background-color: transparent;
+    font-weight: 900;
+    transition-duration: 0.2s;
 }
 
 /* strikethrough checkbox */
@@ -215,10 +244,10 @@ input[type=time]{
     height: 40px;
     width: 70%;
 
-    transition: border-bottom 100ms ease-in;
+    transition: border-bottom 150ms ease-in;
 }
 .todo-input:focus {
-    border-bottom-width: 2.5px;
+    border-bottom-width: 2px;
 }
 .todo-input:focus::placeholder {
     opacity: 0.2;
