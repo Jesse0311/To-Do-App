@@ -1,6 +1,6 @@
 body {
     height: 100%;
-    margin: 0;
+    margin-bottom: 50px;
     font-family: serif;
     display: grid;
     grid-template-columns: auto;
@@ -132,6 +132,7 @@ body {
 }
 
 .task-list-content input {
+    padding-left: 20px;
     letter-spacing: 1px;
     margin: 10px;
     outline: none;
@@ -187,22 +188,25 @@ body {
 
     transition: border-bottom 150ms ease-in;
 }
+
 #datepicker-restrict:focus {
     border-bottom-width: 2px;
 }
+
 #datepicker-restrict:focus::placeholder {
     opacity: 0.2;
 }
 
 /* Sections of the Task Menu */
 .todo-wrapper {
+    bottom: 0;
+    right: 0;
     width: 80%;
     position: relative;
     grid-area: todo-wrapper;
     background-color: white;
     border-radius: 15px;
     padding: 10px;
-    margin-right: 40px;
     height: 100%;
 }
 
@@ -255,10 +259,12 @@ body {
     margin-left: 15px;
     cursor: pointer;
 }
+
 .new-label {
     font-size: 23px;
     letter-spacing: 1px;
 }
+
 .datepicker {
     opacity: 0.7;
     font-size: 15px;
@@ -284,6 +290,7 @@ body {
     border: none;
     transition-duration: 0.1s;
 }
+
 .edit-tasks .edit:hover {
     background-color: #B90C31;
     color: white;
@@ -343,4 +350,106 @@ body {
     background-color: white;
     color: #2A6AC1;
     transition-duration: 0.4s;
+}
+
+/* Media Queries */
+@media screen and (max-width: 480px) {
+    body {
+        height: 100%;
+        margin-bottom: 50px;
+        font-family: serif;
+        display: grid;
+        grid-template-columns: auto;
+        grid-template-rows: auto;
+        grid-template-areas:
+            "header header header header"
+            "lists lists lists lists "
+            "todo-wrapper todo-wrapper todo-wrapper todo-wrapper"
+            "edit-tasks edit-tasks edit-tasks edit-tasks";
+        grid-gap: 40px;
+        justify-content: space-evenly;
+        /* justify-items: center; */
+        align-content: space-evenly;
+        /* align-items: center; */
+        position: relative;
+    }
+
+    .add-list-input {
+        background: transparent;
+        font-size: 20px;
+        padding-left: 10px;
+        margin-right: 2px;
+        border: none;
+        color: inherit;
+        border-bottom: 1px solid currentColor;
+        outline: none;
+        height: 40px;
+        width: 100%;
+
+        transition: border-bottom 150ms ease-in;
+    }
+    .add-list-input::placeholder {
+        letter-spacing: 2px;
+        font-size: 20px;
+    }
+
+    .remove-task-list {
+        display: flex;
+        margin-right: 5px;
+        margin-left: 10px;
+    }
+
+    .todo-wrapper {
+        width: auto;
+        text-align: center;
+        justify-content: center;
+        margin: 20px 20px;
+        position: relative;
+        grid-area: todo-wrapper;
+        background-color: white;
+        border-radius: 15px;
+        padding: 10px;
+        height: 100%;
+    }
+
+    .todo-header {
+        padding: 20px 20px 0px;
+        display: block;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    #datepicker-restrict {
+        background: transparent;
+        font-size: 20px;
+        border: none;
+        color: inherit;
+        border-bottom: 1px solid currentColor;
+        outline: none;
+        width: 100%;
+
+        transition: border-bottom 150ms ease-in;
+    }
+
+    #datepicker-restrict::placeholder {
+        letter-spacing: 2px;
+        font-size: 20px;
+    }
+
+    .todo-input {
+        background: transparent;
+        font-size: 20px;
+        border: none;
+        color: inherit;
+        border-bottom: 1px solid currentColor;
+        outline: none;
+        width: 100%;
+
+        transition: border-bottom 150ms ease-in;
+    }
+
+    .todo-input::placeholder {
+        letter-spacing: 2px;
+        font-size: 20px;
+    }
 }

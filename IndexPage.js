@@ -60,6 +60,8 @@ function renderTasks() {
 
     addTaskList();
 
+
+
     // If there are no List Items selected, this if statement will hide the
     // Tasks Section until a List is created and/or selected
     const selectedList = listData.find(newListData => newListData.id === selectedListId);
@@ -211,6 +213,7 @@ newTaskForm.addEventListener('submit', e => {
     const selectedList = listData.find(newListData => newListData.id === selectedListId);
     selectedList.tasks.push(newTaskData);
 
+
     // Saving changes to the Local Storage and Rendering our JS
     localStorage.setItem('listData', JSON.stringify(listData));
     localStorage.setItem('selectedListId', selectedListId);
@@ -221,8 +224,9 @@ newTaskForm.addEventListener('submit', e => {
 });
 renderTasks();
 
+
 // JQuery datepicker function
-$(function(){
+$(function () {
     $("#datepicker-restrict").datepicker({
         dateFormat: "yy-mm-dd",
         minDate: 0,
