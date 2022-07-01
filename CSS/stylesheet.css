@@ -3,10 +3,17 @@ body {
     margin: 0;
     font-family: serif;
     display: grid;
+    grid-template-columns: auto;
+    grid-template-rows: auto;
     grid-template-areas:
-        "header header header header"
-        "lists lists todo-wrapper todo-wrapper";
-    grid-gap: 20px;
+        "... header header ..."
+        "lists lists todo-wrapper todo-wrapper"
+        "lists lists edit-tasks edit-tasks";
+    grid-gap: 40px;
+    justify-content: space-evenly;
+    /* justify-items: center; */
+    align-content: space-evenly;
+    /* align-items: center; */
     position: relative;
 }
 
@@ -19,10 +26,11 @@ body {
 
 /* Main page header section*/
 .header {
+    width: auto;
     text-align: center;
+    justify-content: center;
     grid-area: header;
     background-color: white;
-    width: auto;
     margin: 20px 20px;
     padding: 10px;
     border-radius: 15px;
@@ -33,9 +41,11 @@ body {
     color: white;
     background-color: #2A6AC1;
 }
+
 #addTaskListButton:active {
     opacity: 0.7;
 }
+
 #addTaskListButton {
     width: 40px;
     border: none;
@@ -51,7 +61,7 @@ body {
 }
 
 /* Styling the task input */
-.add-task-input {
+.add-list-input {
     background: transparent;
     font-size: 20px;
     padding-left: 10px;
@@ -65,10 +75,12 @@ body {
 
     transition: border-bottom 150ms ease-in;
 }
-.add-task-input:focus {
+
+.add-list-input:focus {
     border-bottom-width: 2px;
 }
-.add-task-input:focus::placeholder {
+
+.add-list-input:focus::placeholder {
     opacity: 0.2;
 }
 
@@ -78,22 +90,37 @@ body {
 }
 
 /* Task List Section */
+#my-list {
+    margin-left: 40px;
+    color: white;
+}
+
 .lists {
     grid-area: lists;
 }
+
 .list-name {
+    margin-left: 10px;
+    width: -moz-fit-content;
     width: fit-content;
     border: none;
     cursor: pointer;
 }
+
 .list-name:hover {
     opacity: 0.5;
 }
+
+.active-list {
+    font-weight: 700;
+}
+
 #taskListSection {
     width: auto;
     padding: 20px;
     border-radius: 15px;
 }
+
 .task-list-container {
     align-items: center;
     display: flex;
@@ -103,33 +130,41 @@ body {
     justify-content: space-between;
     margin-bottom: 20px;
 }
+
 .task-list-content input {
+    letter-spacing: 1px;
+    margin: 10px;
     outline: none;
     background-color: transparent;
     color: white;
     width: 100%;
-    margin-top: 10px;
     list-style: none;
     transition-duration: 0.1s;
 }
+
 .task-list-content input:active {
     outline: none;
     opacity: 1;
 }
+
 .task-list-content label {
     cursor: pointer;
 }
+
 .remove-task-list {
     display: flex;
     margin-right: 5px;
 }
+
 .bi:active {
     opacity: 0.7;
 }
+
 .bi:hover {
     color: #B90C31;
 }
-.bi  {
+
+.bi {
     color: white;
     border: none;
     background-color: transparent;
@@ -138,12 +173,13 @@ body {
 }
 
 /* strikethrough checkbox */
-input[type=checkbox]:checked + label {
+input[type=checkbox]:checked+label {
     text-decoration: line-through;
     opacity: 0.7;
 }
+
 /* Styling the date selector */
-input[type=date]{
+input[type=date] {
     margin-top: 3px;
     background-color: #B90C31;
     padding: 5px;
@@ -154,14 +190,22 @@ input[type=date]{
     outline: none;
     border-radius: 5px;
 }
+
 ::-webkit-calendar-picker-indicator {
-    background-color: white;
+    background-color: #B90C31;
+    color: white;
     padding: 3px;
     cursor: pointer;
     border-radius: 3px;
+    transition-duration: 0.1s;
 }
+
+::-webkit-calendar-picker-indicator:hover {
+    background-color: white;
+}
+
 /* Styling the time selector */
-input[type=time]{
+input[type=time] {
     margin-top: 3px;
     background-color: #B90C31;
     padding: 5px;
@@ -173,33 +217,43 @@ input[type=time]{
     outline: none;
     border-radius: 5px;
 }
+
 ::-webkit-time-picker-indicator {
-    background-color: white;
+    background-color: #B90C31;
+    color: white;
     padding: 3px;
     cursor: pointer;
     border-radius: 3px;
+    transition-duration: 0.1s;
+}
+
+::-webkit-time-picker-indicator:hover {
+    background-color: white;
 }
 
 /* Tasks within the task list */
 .todo-wrapper {
+    width: 80%;
+    position: relative;
     grid-area: todo-wrapper;
     background-color: white;
     border-radius: 15px;
     padding: 10px;
-    margin-left: 40px;
     margin-right: 40px;
     height: 100%;
-    /* display: none; */
 }
+
 .todo-header {
     padding: 20px 20px 0px;
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
+
 .todo-title {
     margin: 0 10px 0 0;
 }
+
 .tasks-remaining {
     opacity: 0.7;
     margin: 0;
@@ -210,21 +264,65 @@ input[type=time]{
     padding: 0px 15px;
 }
 
-.task {
-    align-items: center;
+.task-item.done .task-box input {
+    text-decoration: line-through;
+    color: #2A6AC1;
+    opacity: 0.7;
 }
-.task label{
+
+.task-name {
+    border: none;
+    outline: none;
+    margin-left: 10px;
+    width: -moz-fit-content;
+    width: fit-content;
+    cursor: pointer;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.task-item label {
     position: relative;
+    display: block;
     top: -2px;
     margin-left: 5px;
-    margin-bottom: 15px;
     cursor: pointer;
+}
+
+#text-label:checked+label {
+    text-decoration: line-through;
+    color: #2A6AC1;
 }
 
 /* Styling Edit and Delete buttons */
 .edit-tasks {
     margin-top: 10px;
     padding: 0px 15px;
+    grid-area: edit-tasks;
+}
+
+.edit-tasks .edit {
+    position: absolute;
+    right: 20px;
+    bottom: -40px;
+    color: white;
+    background-color: transparent;
+    border-radius: 10px;
+    outline: none;
+    border: none;
+    transition-duration: 0.1s;
+}
+.edit-tasks .edit:hover {
+    background-color: #2A6AC1;
+    color: white;
+}
+
+.edit-tasks .edit:active {
+    opacity: 0.7;
 }
 
 /* Styling the todo input form */
@@ -242,13 +340,15 @@ input[type=time]{
     border-bottom: 1px solid currentColor;
     outline: none;
     height: 40px;
-    width: 70%;
+    width: 80%;
 
     transition: border-bottom 150ms ease-in;
 }
+
 .todo-input:focus {
     border-bottom-width: 2px;
 }
+
 .todo-input:focus::placeholder {
     opacity: 0.2;
 }
@@ -258,9 +358,11 @@ input[type=time]{
     color: white;
     background-color: #2A6AC1;
 }
+
 #add-todo-button:active {
     opacity: 0.7;
 }
+
 #add-todo-button {
     width: 40px;
     border: none;

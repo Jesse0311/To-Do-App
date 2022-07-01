@@ -1,159 +1,268 @@
-// const LOCAL_STORAGE_LIST_KEY = 'task.lists'
-// const LOCAL_STORAGE_SELECTED_LIST_ID_KEY = 'task.selectedListId'
-// let lists = JSON.parse(localStorage.getItem(LOCAL_STORAGE_LIST_KEY)) || []
-// let selectedListId = localStorage.getItem(LOCAL_STORAGE_SELECTED_LIST_ID_KEY)
+const NewListForm = document.querySelector("#new-list-form");
+const addListInput = document.querySelector(".add-list-input");
+const listSection = document.querySelector("#taskListSection");
+const newTaskForm = document.querySelector("#new-task-form");
+const myTodoInput = document.querySelector(".todo-input");
 
-// addNewList.addEventListener('submit', (e) => {
-//     e.preventDefault();
-//     const listName = addTaskInput.value;
+listData = JSON.parse(localStorage.getItem('listData')) || [];
+selectedListId = localStorage.getItem('selectedListId') || "";
 
-//     if (listName == null || listName === ''){
-//         alert("please add a task list!");
-//         return;
-//     }
+listSection.addEventListener('click', e => {
+    if (e.target.tagName.toLowerCase() === 'input') {
+        selectedListId = e.target.dataset.listId;
+        localStorage.setItem('listData', JSON.stringify(listData));
+        localStorage.setItem('selectedListId', selectedListId);
+        renderTasks();
+    }
+})
 
-//         const list = createList(listName);
-//         addTaskInput.value = '';
-//         lists.push(list);
-//         saveAndRender()
-//     }
-// );
+NewListForm.addEventListener('submit', e => {
+    e.preventDefault();
 
-// function createList(name) {
-//     return {id: Date.now().toString(), name: name, tasks: [] };
-// };
+    // Alert message if input field is blank
+    if (addListInput.value == "") {
+        alert("Please Add List Category");
+        return;
+    }
+    renderTasks();
 
-// function saveAndRender() {
-//     save();
-//     render();
-// }
+    const newListData = {
+        id: Date.now().toString(),
+        name: e.target.elements.listContent.value,
+        tasks: []
+    }
 
-// function save() {
-//     localStorage.setItem(LOCAL_STORAGE_LIST_KEY, JSON.stringify(lists));
-// }
+    localStorage.setItem('listData', JSON.stringify(listData));
+    renderTasks();
 
-// function render(){
-//     clearElement(listsContainer)
-//     lists.forEach(list => {
-//         const listElement = document.createElement('li');
-//         listElement.dataset.listId = list.id;
-//         listElement.classList.add("list-name");
-//         listElement.innerText = list.name;
-//         if(list.id === selectedListId) listElement.classList.add()
-//         listsContainer.appendChild(listElement);
-//     })
-// };
+    listData.push(newListData);
 
-// // function clearElement(element){
-// //     while (element.firstChild){
-// //         element.removeChild(element.firstChild)
-// //     }
-// // }
+    localStorage.setItem('listData', JSON.stringify(listData));
 
-// render()
+    // clears input field after submit
+    e.target.reset();
+    renderTasks();
+});
+renderTasks();
+
+function renderTasks() {
+    // These are the variables needed to switch between lists
+    const todoWrapper = document.querySelector(".todo-wrapper");
+    const todoTitle = document.querySelector(".todo-title");
+    const taskSection = document.querySelector(".tasks");
+
+    addTaskList();
+
+    // If there are no List Items selected, this if statement will hide the
+    // Tasks Section until a List is created and/or selected
+    const selectedList = listData.find(newListData => newListData.id === selectedListId);
+    if (selectedListId == "") {
+        todoWrapper.style.display = 'none';
+    } else {
+        todoWrapper.style.display = '';
+        // Replaces Task title with the name of the selected List Item
+        todoTitle.innerText = selectedList.name;
+        taskCount(selectedList);
+        addTask(selectedList);
+    }
+}
+
+// This function counts how many tasks are not checked
+function taskCount(selectedList) {
+    const tasksRemaining = document.querySelector(".tasks-remaining");
+
+    // This filter function checks if the boolean for completed tasks is true or false
+    const completedTasks = selectedList.tasks.filter((newTaskData) => newTaskData.done === true);
+
+    // Mathematical equation subtracting tasks length by completed tasks
+    tasksRemaining.textContent = selectedList.tasks.length - completedTasks.length;
+    if (selectedList.tasks.length - completedTasks.length !== 1) {
+        tasksRemaining.textContent = selectedList.tasks.length - completedTasks.length + " Tasks" + " Remaining";
+    } else {
+        tasksRemaining.textContent = selectedList.tasks.length - completedTasks.length + " Task" + " Remaining";
+    }
+}
+renderTasks();
 
 
-
-
+// This function adds Lists to the My List Section
 function addTaskList() {
     const listSection = document.querySelector("#taskListSection");
-    const NewListForm = document.querySelector(".add-new-list");
-    const addTaskInput = document.querySelector(".add-task-input");
-    
-    const inputValue = addTaskInput.value;
+    const addListInput = document.querySelector(".add-list-input");
 
-;
+    listSection.innerHTML = '';
 
-    if(inputValue == ""){
-        alert("Please fill out the task");
-        return; 
-    }
+    // Loops through every list item in array
+    listData.forEach(newListData => {
+
         // creates list items of user input
         const taskListContainer = document.createElement("div");
         taskListContainer.classList.add("task-list-container");
-        
-        const taskListContent = document.createElement("ul");
+
+        const taskListContent = document.createElement("div");
         taskListContent.classList.add("task-list-content");
 
-        taskListContainer.appendChild(taskListContent);
-
         const listName = document.createElement("input");
+        listName.dataset.listId = newListData.id;
         listName.classList.add("list-name");
         listName.type = "text";
-        listName.value = inputValue;
+        // ListName input value is the [name] array item in the newListData array
+        listName.value = newListData.name;
         listName.setAttribute("readonly", "readonly");
 
-        taskListContent.appendChild(listName);
 
+        // creates the div container for our edit and delete actions
         const actionsContainer = document.createElement("div");
         actionsContainer.classList.add("remove-task-list");
 
+        // creates the edit button
         const editButton = document.createElement("button");
         editButton.className = "bi bi-pencil-square";
 
+        // creates the delete button
         const deleteButton = document.createElement("button");
         deleteButton.className = "bi bi-x-lg";
- 
-        actionsContainer.appendChild(editButton);
-        actionsContainer.appendChild(deleteButton);
 
+        // creates button to delete selected list
+        const deleteSelected = document.createElement("button");
+        deleteSelected.classList = "bi bi-x-lg";
+
+        actionsContainer.appendChild(editButton);
+
+        // This if statement replaces the delete button for unselected
+        // lists with a delete button for a selected list once they have
+        // been clicked on by the user
+        if (selectedListId == newListData.id) {
+            listName.classList.add("active-list");
+            actionsContainer.appendChild(deleteSelected);
+        } else {
+            actionsContainer.appendChild(deleteButton)
+        };
+        taskListContainer.appendChild(taskListContent);
+        taskListContent.appendChild(listName);
         taskListContainer.appendChild(actionsContainer);
-        
+
+        // appends the task lists created inside of the My Lists section
         listSection.appendChild(taskListContainer);
 
-    // clears input field after button is clicked
-    addTaskInput.value = "";
 
-        editButton.addEventListener('click', () =>{
-            if (editButton.className == "bi bi-pencil-square"){
-            listName.removeAttribute("readonly");
+
+        // this code allows us to edit our List Items
+        editButton.addEventListener('click', e => {
+            listName.removeAttribute("readonly", "readonly");
             listName.focus();
+            listName.style.cursor = "text";
             editButton.className = "bi bi-save";
-            }else{
+            // once edit is clicked, changes are saved when user clicks
+            // outside of the List or on the save button created
+            listName.addEventListener('blur', e => {
+                newListData.name = e.target.value;
+                localStorage.setItem('listData', JSON.stringify(listData));
+                renderTasks();
                 listName.setAttribute("readonly", "readonly");
                 editButton.className = "bi bi-pencil-square";
-            }
-    });
-        deleteButton.addEventListener('click', () =>{
-            listSection.removeChild(taskListContainer);
+            });
         });
-
-
-    };
-
-function addTask() {
-    const myTodoInput = document.querySelector(".todo-input");
-    const ul = document.getElementById("task-box");
-
-    const taskInputValue = myTodoInput.value;
-    
-        if(taskInputValue == ""){
-            alert("Please fill out input");
-            return;
-        }
-
-        // creates list items of user input
-        const newTask = document.createElement("div");
-        newTask.classList.add("task");
-
-        const newLabel = document.createElement("label");
-        newLabel.setAttribute("for", 'task-checkbox');
-        newLabel.innerHTML = myTodoInput.value
-
-        const newTaskInput = document.createElement("input");
-        newTaskInput.type = "checkbox"
-        newTaskInput.setAttribute("id", 'task-checkbox');
-     
-
-        newTask.appendChild(newTaskInput);
-        newTask.appendChild(newLabel);
-        ul.appendChild(newTask);
-
-    // clears input field after button is clicked
-    document.querySelector(".todo-input").value = "";
+        // This code allows us to delete List Items
+        deleteButton.addEventListener('click', () => {
+            listData = listData.filter(thisList => thisList !== newListData);
+            localStorage.setItem('listData', JSON.stringify(listData));
+            renderTasks();
+        });
+        // This code allows us to delete the selected List Item. This delete
+        // button will hide the Task Section when clicked
+        deleteSelected.addEventListener('click', () => {
+            listData = listData.filter(thisList => thisList !== newListData);
+            listData = listData.filter(newListData => newListData.id !== selectedListId);
+            selectedListId = "";
+            localStorage.setItem('listData', JSON.stringify(listData));
+            localStorage.setItem('selectedListId', selectedListId);
+            renderTasks();
+        });
+    });
 };
 
-function tasksRemaining() {
-    let tasksRemaining = document.getElementById("tasks-remaining");
+newTaskForm.addEventListener('submit', e => {
+    e.preventDefault();
 
-}
+    // Alert message if input field is blank
+    if (myTodoInput.value == "") {
+        alert("Please Fill Out Input");
+        return;
+    }
+
+    const newTaskData = {
+        id: Date.now().toString(),
+        name: e.target.elements.taskContent.value,
+        done: false,
+    };
+
+    const selectedList = listData.find(newListData => newListData.id === selectedListId);
+    selectedList.tasks.push(newTaskData);
+
+    localStorage.setItem('listData', JSON.stringify(listData));
+    localStorage.setItem('selectedListId', selectedListId);
+    renderTasks();
+
+    // clears input field after submit
+    e.target.reset();
+});
+renderTasks();
+
+// function to add a Task Item
+function addTask(selectedList) {
+    const taskSection = document.querySelector(".tasks");
+    const clearCompleted = document.querySelector('.clear-completed');
+
+    taskSection.innerHTML = '';
+
+    // Loops through every task item in array
+    selectedList.tasks.forEach(newTaskData => {
+
+
+        // creates checkbox items of user input
+        const taskItem = document.createElement("div");
+        taskItem.classList.add("task-item");
+
+        const taskName = document.createElement("input");
+        taskName.classList.add("task-name");
+        taskName.type = "checkbox";
+        taskName.checked = newTaskData.done;
+        taskName.setAttribute("id", newTaskData.id)
+
+        const newLabel = document.createElement("label");
+        newLabel.setAttribute("for", newTaskData.id);
+        newLabel.innerHTML = newTaskData.name;
+        newLabel.setAttribute("readonly", "readonly");
+
+        taskItem.appendChild(taskName);
+        taskItem.appendChild(newLabel);
+
+        taskSection.appendChild(taskItem);
+
+        if (newTaskData.done) {
+            taskItem.classList.add("done");
+        }
+
+        taskCount(selectedList);
+
+        taskName.addEventListener('click', e => {
+            newTaskData.done = e.target.checked;
+            localStorage.setItem('listData', JSON.stringify(listData));
+            localStorage.setItem('selectedListId', selectedListId);
+            renderTasks();
+
+            if (newTaskData.done) {
+                taskItem.classList.add("done");
+            } else {
+                taskItem.classList.remove("done");
+            }
+        });
+
+        clearCompleted.addEventListener('click', () => {
+            selectedList.tasks = selectedList.tasks.filter((newTaskData) => newTaskData.done === false);
+            localStorage.setItem('listData', JSON.stringify(listData));
+            renderTasks();
+        });
+    });
+};
