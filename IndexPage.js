@@ -7,6 +7,9 @@ const myTodoInput = document.querySelector(".todo-input");
 listData = JSON.parse(localStorage.getItem('listData')) || [];
 selectedListId = localStorage.getItem('selectedListId') || "";
 
+// This event listener will change the selectedListId to match
+// the List id of whichever list is selected, and increase its font-weight
+// to make it obvious which list is selected
 listSection.addEventListener('click', e => {
     if (e.target.tagName.toLowerCase() === 'input') {
         selectedListId = e.target.dataset.listId;
@@ -16,6 +19,7 @@ listSection.addEventListener('click', e => {
     }
 })
 
+// Event listener for List form, adds list items on submit
 NewListForm.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -26,12 +30,15 @@ NewListForm.addEventListener('submit', e => {
     }
     renderTasks();
 
+    // My List Data with an empty tasks array, which will contain
+    // Tasks for each selected List Item
     const newListData = {
         id: Date.now().toString(),
         name: e.target.elements.listContent.value,
         tasks: []
     }
 
+    // Saves changes in Local Storage and renders our JS
     localStorage.setItem('listData', JSON.stringify(listData));
     renderTasks();
 
@@ -182,6 +189,7 @@ function addTaskList() {
     });
 };
 
+// Event listener for the Task Form, adds task items submit
 newTaskForm.addEventListener('submit', e => {
     e.preventDefault();
 
@@ -191,15 +199,19 @@ newTaskForm.addEventListener('submit', e => {
         return;
     }
 
+    // Tasks array
     const newTaskData = {
         id: Date.now().toString(),
         name: e.target.elements.taskContent.value,
+        dueDate: e.target.elements.datePicker.value,
         done: false,
     };
 
+    // this const is set to find the List array contents for each selected List by id
     const selectedList = listData.find(newListData => newListData.id === selectedListId);
     selectedList.tasks.push(newTaskData);
 
+    // Saving changes to the Local Storage and Rendering our JS
     localStorage.setItem('listData', JSON.stringify(listData));
     localStorage.setItem('selectedListId', selectedListId);
     renderTasks();
@@ -209,35 +221,58 @@ newTaskForm.addEventListener('submit', e => {
 });
 renderTasks();
 
+// JQuery datepicker function
+$(function(){
+    $("#datepicker-restrict").datepicker({
+        dateFormat: "yy-mm-dd",
+        minDate: 0,
+        maxDate: "+1Y"
+    });
+});
+
 // function to add a Task Item
 function addTask(selectedList) {
     const taskSection = document.querySelector(".tasks");
-    const clearCompleted = document.querySelector('.clear-completed');
+    const clearCompleted = document.querySelector(".clear-completed");
 
     taskSection.innerHTML = '';
 
     // Loops through every task item in array
     selectedList.tasks.forEach(newTaskData => {
 
-
         // creates checkbox items of user input
         const taskItem = document.createElement("div");
         taskItem.classList.add("task-item");
+
+        const labelDiv = document.createElement("div");
+        labelDiv.classList.add("label-div");
 
         const taskName = document.createElement("input");
         taskName.classList.add("task-name");
         taskName.type = "checkbox";
         taskName.checked = newTaskData.done;
-        taskName.setAttribute("id", newTaskData.id)
+        taskName.setAttribute("id", newTaskData.id);
 
+        // This is the label container for the Task Name
         const newLabel = document.createElement("label");
+        newLabel.classList.add("new-label")
         newLabel.setAttribute("for", newTaskData.id);
         newLabel.innerHTML = newTaskData.name;
         newLabel.setAttribute("readonly", "readonly");
 
-        taskItem.appendChild(taskName);
-        taskItem.appendChild(newLabel);
+        // This is the label container for the Date picker
+        const datePicker = document.createElement("label");
+        datePicker.classList.add("datepicker");
+        datePicker.setAttribute("for", newTaskData.id);
+        datePicker.innerHTML = newTaskData.dueDate;
 
+        // The containers within the Task Menu
+        taskItem.appendChild(taskName);
+        taskItem.appendChild(labelDiv);
+        labelDiv.appendChild(newLabel);
+        labelDiv.appendChild(datePicker);
+
+        // Task Menu body container
         taskSection.appendChild(taskItem);
 
         if (newTaskData.done) {
@@ -246,12 +281,14 @@ function addTask(selectedList) {
 
         taskCount(selectedList);
 
+        // event listener for clicking on a task to mark it as checked
         taskName.addEventListener('click', e => {
             newTaskData.done = e.target.checked;
             localStorage.setItem('listData', JSON.stringify(listData));
             localStorage.setItem('selectedListId', selectedListId);
             renderTasks();
 
+            // Add a class of "done" to whichever task is clicked
             if (newTaskData.done) {
                 taskItem.classList.add("done");
             } else {
@@ -259,6 +296,7 @@ function addTask(selectedList) {
             }
         });
 
+        // This button will clear all the tasks that have been checked
         clearCompleted.addEventListener('click', () => {
             selectedList.tasks = selectedList.tasks.filter((newTaskData) => newTaskData.done === false);
             localStorage.setItem('listData', JSON.stringify(listData));

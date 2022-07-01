@@ -39,7 +39,7 @@ body {
 /* Styling the task button */
 #addTaskListButton:hover {
     color: white;
-    background-color: #2A6AC1;
+    background-color: #B90C31;
 }
 
 #addTaskListButton:active {
@@ -172,66 +172,29 @@ body {
     transition-duration: 0.2s;
 }
 
-/* strikethrough checkbox */
-input[type=checkbox]:checked+label {
-    text-decoration: line-through;
-    opacity: 0.7;
-}
-
-/* Styling the date selector */
-input[type=date] {
-    margin-top: 3px;
-    background-color: #B90C31;
-    padding: 5px;
-    font-family: "Roboto Mono", monospace;
-    color: white;
-    font-size: 12px;
+/* Styling the date picker */
+#datepicker-restrict {
+    background: transparent;
+    font-size: 20px;
+    padding-left: 10px;
+    margin-right: 2px;
     border: none;
+    color: inherit;
+    border-bottom: 1px solid currentColor;
     outline: none;
-    border-radius: 5px;
+    height: 40px;
+    width: 80%;
+
+    transition: border-bottom 150ms ease-in;
+}
+#datepicker-restrict:focus {
+    border-bottom-width: 2px;
+}
+#datepicker-restrict:focus::placeholder {
+    opacity: 0.2;
 }
 
-::-webkit-calendar-picker-indicator {
-    background-color: #B90C31;
-    color: white;
-    padding: 3px;
-    cursor: pointer;
-    border-radius: 3px;
-    transition-duration: 0.1s;
-}
-
-::-webkit-calendar-picker-indicator:hover {
-    background-color: white;
-}
-
-/* Styling the time selector */
-input[type=time] {
-    margin-top: 3px;
-    background-color: #B90C31;
-    padding: 5px;
-    margin-left: 12px;
-    font-family: "Roboto Mono", monospace;
-    color: white;
-    font-size: 12px;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-}
-
-::-webkit-time-picker-indicator {
-    background-color: #B90C31;
-    color: white;
-    padding: 3px;
-    cursor: pointer;
-    border-radius: 3px;
-    transition-duration: 0.1s;
-}
-
-::-webkit-time-picker-indicator:hover {
-    background-color: white;
-}
-
-/* Tasks within the task list */
+/* Sections of the Task Menu */
 .todo-wrapper {
     width: 80%;
     position: relative;
@@ -264,7 +227,7 @@ input[type=time] {
     padding: 0px 15px;
 }
 
-.task-item.done .task-box input {
+.task-item.done .label-div {
     text-decoration: line-through;
     color: #2A6AC1;
     opacity: 0.7;
@@ -287,16 +250,21 @@ input[type=time] {
 
 .task-item label {
     position: relative;
-    display: block;
+    display: flex;
     top: -2px;
-    margin-left: 5px;
+    margin-left: 15px;
     cursor: pointer;
 }
-
-#text-label:checked+label {
-    text-decoration: line-through;
-    color: #2A6AC1;
+.new-label {
+    font-size: 23px;
+    letter-spacing: 1px;
 }
+.datepicker {
+    opacity: 0.7;
+    font-size: 15px;
+
+}
+
 
 /* Styling Edit and Delete buttons */
 .edit-tasks {
@@ -317,7 +285,7 @@ input[type=time] {
     transition-duration: 0.1s;
 }
 .edit-tasks .edit:hover {
-    background-color: #2A6AC1;
+    background-color: #B90C31;
     color: white;
 }
 
@@ -356,7 +324,7 @@ input[type=time] {
 /* Styling the todo button */
 #add-todo-button:hover {
     color: white;
-    background-color: #2A6AC1;
+    background-color: #B90C31;
 }
 
 #add-todo-button:active {
