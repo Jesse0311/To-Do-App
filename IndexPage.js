@@ -12,7 +12,7 @@ selectedListId = localStorage.getItem('selectedListId') || "";
 // to make it obvious which list is selected
 listSection.addEventListener('click', e => {
     if (e.target.tagName.toLowerCase() === 'input') {
-        selectedListId = e.target.dataset.listId;
+        selectedListId = e.target.listId;
         localStorage.setItem('listData', JSON.stringify(listData));
         localStorage.setItem('selectedListId', selectedListId);
         renderTasks();
@@ -34,20 +34,19 @@ NewListForm.addEventListener('submit', e => {
     // Tasks for each selected List Item
     const newListData = {
         id: Date.now().toString(),
-        name: e.target.elements.listContent.value,
+        name: addListInput.value,
         tasks: []
     }
 
-    // Saves changes in Local Storage and renders our JS
-    localStorage.setItem('listData', JSON.stringify(listData));
-    renderTasks();
-
     listData.push(newListData);
 
+    // Saves changes in Local Storage and renders our JS
     localStorage.setItem('listData', JSON.stringify(listData));
+    localStorage.setItem('selectedListId', selectedListId);
+    renderTasks();
 
     // clears input field after submit
-    e.target.reset();
+    addListInput.value = "";
     renderTasks();
 });
 renderTasks();
@@ -56,7 +55,6 @@ function renderTasks() {
     // These are the variables needed to switch between lists
     const todoWrapper = document.querySelector(".todo-wrapper");
     const todoTitle = document.querySelector(".todo-title");
-    const taskSection = document.querySelector(".tasks");
 
     addTaskList();
 
@@ -94,7 +92,7 @@ function taskCount(selectedList) {
 renderTasks();
 
 
-// This function adds Lists to the My List Section
+// ADD LIST 
 function addTaskList() {
     const listSection = document.querySelector("#taskListSection");
     const addListInput = document.querySelector(".add-list-input");
@@ -112,7 +110,7 @@ function addTaskList() {
         taskListContent.classList.add("task-list-content");
 
         const listName = document.createElement("input");
-        listName.dataset.listId = newListData.id;
+        listName.listId = newListData.id;
         listName.classList.add("list-name");
         listName.type = "text";
         // ListName input value is the [name] array item in the newListData array
@@ -162,6 +160,7 @@ function addTaskList() {
             listName.focus();
             listName.style.cursor = "text";
             editButton.className = "bi bi-save";
+
             // once edit is clicked, changes are saved when user clicks
             // outside of the List or on the save button created
             listName.addEventListener('blur', e => {
@@ -172,6 +171,7 @@ function addTaskList() {
                 editButton.className = "bi bi-pencil-square";
             });
         });
+
         // This code allows us to delete List Items
         deleteButton.addEventListener('click', () => {
             listData = listData.filter(thisList => thisList !== newListData);
@@ -201,11 +201,13 @@ newTaskForm.addEventListener('submit', e => {
         return;
     }
 
+    const datePickerInput = document.querySelector("#datepicker-restrict");
+
     // Tasks array
     const newTaskData = {
         id: Date.now().toString(),
-        name: e.target.elements.taskContent.value,
-        dueDate: e.target.elements.datePicker.value,
+        name: myTodoInput.value,
+        dueDate: datePickerInput.value,
         done: false,
     };
 
@@ -220,7 +222,7 @@ newTaskForm.addEventListener('submit', e => {
     renderTasks();
 
     // clears input field after submit
-    e.target.reset();
+    myTodoInput.value = ""
 });
 renderTasks();
 
@@ -234,7 +236,7 @@ $(function () {
     });
 });
 
-// function to add a Task Item
+// ADD TASK
 function addTask(selectedList) {
     const taskSection = document.querySelector(".tasks");
     const clearCompleted = document.querySelector(".clear-completed");
